@@ -8,7 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import prometheus.PrometheusMetricDataParser;
 import prometheus.Util;
 import prometheus.types.Counter;
@@ -23,7 +24,7 @@ import prometheus.types.Summary;
  * Provides a method that can scrape Permetheus text metric data from input streams.
  */
 public class TextPrometheusMetricDataParser extends PrometheusMetricDataParser<MetricFamily> {
-    private static final Logger log = Logger.getLogger(TextPrometheusMetricDataParser.class);
+    private static final Logger log = LoggerFactory.getLogger(TextPrometheusMetricDataParser.class);
 
     private String lastLineReadFromStream; // this is only set when we break from the while loop in parse()
 
@@ -113,7 +114,7 @@ public class TextPrometheusMetricDataParser extends PrometheusMetricDataParser<M
                             } else {
                                 // This must be a quantile sample
                                 if (quantileValue == null) {
-                                    log.debugf("Summary quantile sample is missing the 'quantile' label: %s",
+                                    log.debug("Summary quantile sample is missing the 'quantile' label: %s",
                                             textSample.getLine());
                                 }
                                 sBuilder.addQuantile(Util.convertStringToDouble(quantileValue),
@@ -150,8 +151,8 @@ public class TextPrometheusMetricDataParser extends PrometheusMetricDataParser<M
                             break;
                     }
                 } catch (Exception e) {
-                    log.debugf(e, "Error processing sample. This metric sample will be ignored: %s",
-                            textSample.getLine());
+                    log.debug("Error processing sample. This metric sample will be ignored: {}",
+                            textSample.getLine(), e);
                 }
             }
 
@@ -160,7 +161,7 @@ public class TextPrometheusMetricDataParser extends PrometheusMetricDataParser<M
                 try {
                     metricFamilyBuilder.addMetric(builder.build());
                 } catch (Exception e) {
-                    log.debugf(e, "Error building metric for metric family [%s] - it will be ignored", name);
+                    log.debug("Error building metric for metric family [{}] - it will be ignored", name, e);
                 }
             }
 
@@ -267,14 +268,14 @@ public class TextPrometheusMetricDataParser extends PrometheusMetricDataParser<M
                             break;
                         }
                         context.clear();
-                        log.debugf("Ignoring an unexpected metric: " + line);
+                        log.debug("Ignoring an unexpected metric: " + line);
                     } else {
                         // add the sample to the family we are building up
                         context.textSamples.add(sample);
                     }
                 }
             } catch (Exception e) {
-                log.debugf("Failed to process line - it will be ignored: %s", line);
+                log.debug("Failed to process line - it will be ignored: %s", line);
             }
 
             // go to the next line

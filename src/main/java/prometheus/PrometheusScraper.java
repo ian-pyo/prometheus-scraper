@@ -8,7 +8,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.List;
 
-import org.jboss.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import prometheus.binary.BinaryPrometheusMetricsProcessor;
 import prometheus.text.TextPrometheusMetricsProcessor;
 import prometheus.types.MetricFamily;
@@ -21,7 +22,7 @@ import prometheus.walkers.PrometheusMetricsWalker;
  * able to give you all the metric data found there, regardless of the format of the data.
  */
 public class PrometheusScraper {
-    private static final Logger log = Logger.getLogger(PrometheusScraper.class);
+    private static final Logger log = LoggerFactory.getLogger(PrometheusScraper.class);
 
     private final URL url;
     private final PrometheusDataFormat knownDataFormat;
@@ -49,7 +50,7 @@ public class PrometheusScraper {
         }
         this.url = new URL("http", host, port, context);
         this.knownDataFormat = null;
-        log.debugf("Will scrape Permetheus data from URL [%s]", this.url);
+        log.debug("Will scrape Permetheus data from URL [%s]", this.url);
     }
 
     public PrometheusScraper(URL url) {
@@ -75,7 +76,7 @@ public class PrometheusScraper {
         }
         this.url = url;
         this.knownDataFormat = dataFormat;
-        log.debugf("Will scrape Permetheus data from URL [%s] with data format [%s]",
+        log.debug("Will scrape Permetheus data from URL [%s] with data format [%s]",
                 this.url, (this.knownDataFormat == null) ? "<TBD>" : this.knownDataFormat);
     }
 
@@ -102,7 +103,7 @@ public class PrometheusScraper {
 
         this.knownDataFormat = dataFormat;
 
-        log.debugf("Will scrape Permetheus data from file [%s] with data format [%s]", this.url,
+        log.debug("Will scrape Permetheus data from file [%s] with data format [%s]", this.url,
                 this.knownDataFormat);
     }
 
@@ -141,7 +142,7 @@ public class PrometheusScraper {
                 processor = new TextPrometheusMetricsProcessor(inputStream, walker);
             } else {
                 // unknown - since all Prometheus endpoints are required to support text, try it
-                log.debugf("Unknown content type for URL [%s]. Trying text format.", url);
+                log.debug("Unknown content type for URL [%s]. Trying text format.", url);
                 processor = new TextPrometheusMetricsProcessor(inputStream, walker);
             }
 

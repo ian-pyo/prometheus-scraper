@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.jboss.logging.Logger.Level;
+import org.slf4j.event.Level;
 import org.junit.Assert;
 import org.junit.Test;
 import prometheus.binary.BinaryPrometheusMetricDataParser;

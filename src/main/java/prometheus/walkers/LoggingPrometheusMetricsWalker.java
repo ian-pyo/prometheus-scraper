@@ -2,8 +2,9 @@ package prometheus.walkers;
 
 import java.util.Map;
 
-import org.jboss.logging.Logger;
-import org.jboss.logging.Logger.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 import prometheus.types.Counter;
 import prometheus.types.Gauge;
 import prometheus.types.Histogram;
@@ -14,7 +15,7 @@ import prometheus.types.Summary;
  * This implementation simply logs the metric values.
  */
 public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
-    private static final Logger log = Logger.getLogger(LoggingPrometheusMetricsWalker.class);
+    private static final Logger log = LoggerFactory.getLogger(LoggingPrometheusMetricsWalker.class);
     private Level logLevel;
 
     public LoggingPrometheusMetricsWalker() {
@@ -35,7 +36,7 @@ public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
 
     @Override
     public void walkMetricFamily(MetricFamily family, int index) {
-        log.logf(getLogLevel(), "Metric Family [%s] of type [%s] has [%d] metrics: %s",
+        log.info("Metric Family [{}] of type [{}] has [{}] metrics: {}",
                 family.getName(),
                 family.getType(),
                 family.getMetrics().size(),
@@ -44,7 +45,7 @@ public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
 
     @Override
     public void walkCounterMetric(MetricFamily family, Counter metric, int index) {
-        log.logf(getLogLevel(), "COUNTER: %s%s=%f",
+        log.info("COUNTER: {}{}={}",
                 metric.getName(),
                 buildLabelListString(metric.getLabels()),
                 metric.getValue());
@@ -52,7 +53,7 @@ public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
 
     @Override
     public void walkGaugeMetric(MetricFamily family, Gauge metric, int index) {
-        log.logf(getLogLevel(), "GAUGE: %s%s=%f",
+        log.info("GAUGE: {}{}={}",
                 metric.getName(),
                 buildLabelListString(metric.getLabels()),
                 metric.getValue());
@@ -60,7 +61,7 @@ public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
 
     @Override
     public void walkSummaryMetric(MetricFamily family, Summary metric, int index) {
-        log.logf(getLogLevel(), "SUMMARY: %s%s: count=%d, sum=%f, quantiles=%s",
+        log.info("SUMMARY: {}{}: count={}, sum={}, quantiles={}",
                 metric.getName(),
                 buildLabelListString(metric.getLabels()),
                 metric.getSampleCount(),
@@ -70,7 +71,7 @@ public class LoggingPrometheusMetricsWalker implements PrometheusMetricsWalker {
 
     @Override
     public void walkHistogramMetric(MetricFamily family, Histogram metric, int index) {
-        log.logf(getLogLevel(), "HISTOGRAM: %s%s: count=%d, sum=%f, buckets=%s",
+        log.info("HISTOGRAM: {}{}: count={}, sum={}, buckets={}",
                 metric.getName(),
                 buildLabelListString(metric.getLabels()),
                 metric.getSampleCount(),

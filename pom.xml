@@ -4,7 +4,7 @@
 
   <groupId>org.github.jmazzitelli</groupId>
   <artifactId>prometheus-scraper</artifactId>
-  <version>1.0.0.Final</version>
+  <version>1.0.1</version>
 
   <name>Prometheus Scraper</name>
   <description>Java API that scrapes metrics from a Prometheus protocol endpoint.</description>
@@ -25,9 +25,15 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jboss.logging</groupId>
-      <artifactId>jboss-logging</artifactId>
-      <version>3.3.0.Final</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.36</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+      <scope>runtime</scope>
     </dependency>
 
   </dependencies>

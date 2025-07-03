@@ -2,7 +2,7 @@ package prometheus;
 
 import java.net.URL;
 
-import org.jboss.logging.Logger.Level;
+import org.slf4j.event.Level;
 import prometheus.walkers.JSONPrometheusMetricsWalker;
 import prometheus.walkers.LoggingPrometheusMetricsWalker;
 import prometheus.walkers.PrometheusMetricsWalker;
